@@ -1,11 +1,9 @@
-// Import configuration from config.js
-import config from './config.js';
-const WEATHER_API_KEY = config.WEATHER_API_KEY;
-const WEATHER_API_URL = config.WEATHER_API_URL;
+const WEATHER_API_KEY = 'YOUR_API_KEY';
+const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 let player;
 const weatherVideos = {
-    Clear: 'ipf7ifVSeDU',      // Sunny day
+    Clear: 'ipf7ifVSeDU',      // Sunny day timelapse
     Clouds: 'RxXFPTHyJsI',      // Cloudy sky
     Rain: 'Qo4JIT8jMtI',        // Rain sounds
     Snow: 'sGkh1W5cbH4',        // Snowfall
@@ -22,6 +20,7 @@ function loadYouTubeAPI() {
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     
+    // Add error handling for YouTube API loading
     tag.onerror = function() {
         console.error('Failed to load YouTube IFrame API');
         // Create a fallback background color
@@ -166,11 +165,11 @@ async function getUserLocation() {
             return data.name;
         } catch (error) {
             console.error('Error getting location:', error);
-            return 'London';
+            return 'London'; // Fallback to London if geolocation fails
         }
     } else {
         console.log('Geolocation is not supported by this browser.');
-        return 'London';
+        return 'London'; // Fallback to London if geolocation is not supported
     }
 }
 
@@ -179,13 +178,15 @@ loadYouTubeAPI();
 
 // Load weather data
 document.addEventListener('DOMContentLoaded', async () => {
+    // Show loading state
     document.getElementById('city').textContent = 'Loading...';
     
     try {
+        // Get user's location
         const userCity = await getUserLocation();
         getWeatherData(userCity);
     } catch (error) {
         console.error('Error initializing app:', error);
-        getWeatherData('London');
+        getWeatherData('London'); // Fallback to London
     }
 });
